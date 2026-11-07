@@ -12,14 +12,31 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
 
 const UpdateUserDialog = ({ user }) => {
 
-    const handleUpdateUser = (e) => {
+    const router = useRouter();
+
+    const handleUpdateUser = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const updatedUser = Object.fromEntries(formData.entries());
-        
+
+        const res = await fetch(`http://localhost:5000/users/${user._id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedUser),
+        })
+        const result = await res.json();
+
+        console.log('result from server', result);
+        if (result.modifiedCount > 0) {
+            console.log('User updated successfully');
+            router.refresh();
+        }
     }
 
     return (
@@ -46,7 +63,8 @@ const UpdateUserDialog = ({ user }) => {
                     </FieldGroup>
                     <DialogFooter>
                         <DialogClose render={<Button variant="outline">Cancel</Button>} />
-                        <Button type="submit">Save changes</Button>
+                        <DialogClose render={<Button type="submit">Save changes</Button>} />
+
                     </DialogFooter>
                 </form>
             </DialogContent>
