@@ -11,6 +11,7 @@ import {
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import UpdateUserDialog from "./UpdateUserDialog";
 
 
 
@@ -34,8 +35,6 @@ const UserCard = ({ user }) => {
 
     return (
         <Card className="relative mx-auto w-full max-w-sm pt-0">
-            
-
             <CardHeader>
                 <CardAction>
                     <h2>No Action</h2>
@@ -49,7 +48,7 @@ const UserCard = ({ user }) => {
                 <Link href={`/users/${user._id}`}>
                     <Button className="w-full">View Event</Button>
                 </Link>
-                <Button className="mx-1.5">Edit</Button>
+                <UpdateUserDialog user={user} />
                 <Button 
                 onClick={() => handleDeleteUser(_id)}
                 variant="destructive">Delete</Button>
